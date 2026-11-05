@@ -1,10 +1,10 @@
 const con = require('../db')
 
 const cadastrar = (req, res) => {
-    const { usuarioId, cidade, tipoOcorrencia, temperaturaMaxima, nivelImpacto } = req.body
+    const { usuarioId, local, tipoResiduo, nivelRisco, data, status } = req.body
     try {
-        const sql = 'INSERT INTO ocorrencia (usuarioId, local, tipoResiduo, nivelRisco, data, status) VALUES (?, ?, ?, ?, ?, ?);'
-        con.query(sql, [usuarioId, cidade, tipoOcorrencia, temperaturaMaxima, nivelImpacto], (err, results) => {
+        const sql = 'INSERT INTO ocorrencias (usuarioId, local, tipoResiduo, nivelRisco, data, status) VALUES (?, ?, ?, ?, ?, ?);'
+        con.query(sql, [usuarioId, local, tipoResiduo, nivelRisco, data, status], (err, results) => {
             if (err) {
                 console.error(err)
                 res.status(500).json({ error: 'Erro ao cadastrar ocorrência' })
@@ -21,7 +21,7 @@ const cadastrar = (req, res) => {
 }
 
 const listar = (req, res) => {
-    const sql = 'SELECT * FROM ocorrencia;'
+    const sql = 'SELECT * FROM ocorrencias;'
     con.query(sql, (err, results) => {
         if (err) {
             console.error(err)
@@ -43,7 +43,7 @@ const alterar = (req, res) => {
     })
     campos = campos.slice(0, -1) //Remove a ultima virgula
     colunas.push(id)
-    const sql = `UPDATE ocorrencia SET ${campos} WHERE id = ?;`
+    const sql = `UPDATE ocorrencias SET ${campos} WHERE id = ?;`
     con.query(sql, colunas, (err, results) => {
         if (err) {
             console.error(err)
@@ -59,7 +59,7 @@ const alterar = (req, res) => {
 
 const excluir = (req, res) => {
     const id = Number(req.params.id)
-    const sql = 'DELETE FROM ocorrencia WHERE id = ?;'
+    const sql = 'DELETE FROM ocorrencias WHERE id = ?;'
     con.query(sql, [id], (err, results) => {
         if (err) {
             console.error(err)
@@ -74,8 +74,8 @@ const excluir = (req, res) => {
 }
 
 const resumo = (req, res) => {
-    const sql1 = 'SELECT AVG(temperaturaMaxima) as "Temperaturas medias" FROM ocorrencia;'
-    const sql2 = 'SELECT * FROM ocorrencia;'
+    const sql1 = "SELECT count(*) as 'Residuos tratados' FROM ocorrencias WHERE status='Tratado'"
+    const sql2 = 'SELECT * FROM ocorrencias;'
     con.query(sql1, (err, results) => {
         if (err) {
             console.error(err)

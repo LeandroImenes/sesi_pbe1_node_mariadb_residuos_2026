@@ -2,7 +2,7 @@ const con = require('../db')
 
 const login = (req, res) => {
     const { email, senha } = req.body
-    const sql = 'SELECT id, nome, email FROM usuario WHERE email = ? AND senha = password(?);'
+    const sql = 'SELECT id, nome, email FROM usuarios WHERE email = ? AND senha = password(?);'
     con.query(sql, [email, senha], (err, results) => {
         if (err) {
             console.error(err)
@@ -20,7 +20,7 @@ const login = (req, res) => {
 const cadastrar = (req, res) => {
     const { nome, email, senha } = req.body
     try {
-        const sql = 'INSERT INTO usuario (nome, email, senha) VALUES (?, ?, password(?));'
+        const sql = 'INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, password(?));'
         con.query(sql, [nome, email, senha], (err, results) => {
             if (err) {
                 console.error(err)
@@ -38,7 +38,7 @@ const cadastrar = (req, res) => {
 }
 
 const listar = (req, res) => {
-    const sql = 'SELECT * FROM usuario;'
+    const sql = 'SELECT * FROM usuarios;'
     con.query(sql, (err, results) => {
         if (err) {
             console.error(err)
@@ -52,7 +52,7 @@ const listar = (req, res) => {
 const alterar = (req, res) => {
     const { nome, email, senha } = req.body
     try {
-        const sql = 'UPDATE usuario SET nome = ?, email = ?, senha = password(?) WHERE id = ?;'
+        const sql = 'UPDATE usuarios SET nome = ?, email = ?, senha = password(?) WHERE id = ?;'
         con.query(sql, [nome, email, senha, Number(req.params.id)], (err, results) => {
             if (err) {
                 console.error(err)
@@ -71,7 +71,7 @@ const alterar = (req, res) => {
 
 const excluir = (req, res) => {
     const id = Number(req.params.id)
-    const sql = 'DELETE FROM usuario WHERE id = ?;'
+    const sql = 'DELETE FROM usuarios WHERE id = ?;'
     con.query(sql, [id], (err, results) => {
         if (err) {
             console.error(err)
